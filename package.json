@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zzzteph/hashcat-rules-js.git"
+    "url": "git+https://github.com/zzzteph/hashcat-reverse-rules-js.git"
   },
   "keywords": [
     "hashcat",
@@ -25,9 +25,9 @@
   "author": "zzzteph",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zzzteph/hashcat-rules-js/issues"
+    "url": "https://github.com/zzzteph/hashcat-reverse-rules-js/issues"
   },
-  "homepage": "https://github.com/zzzteph/hashcat-rules-js#readme",
+  "homepage": "https://github.com/zzzteph/hashcat-reverse-rules-js#readme",
   "devDependencies": {
     "@babel/cli": "^7.24.8",
     "@babel/core": "^7.25.2",
