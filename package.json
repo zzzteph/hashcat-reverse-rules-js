@@ -1,0 +1,41 @@
+{
+  "name": "hashcat-reverse-rules-js",
+  "version": "1.0.0",
+  "description": "Reverse rules hashcat engine and generating candidates for password for complex search",
+  "main": "dist/hashcat-reverse-rules.js",
+  "scripts": {
+    "test": "node test.js",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zzzteph/hashcat-rules-js.git"
+  },
+  "keywords": [
+    "hashcat",
+    "bruteforce",
+    "rules",
+    "passwords",
+    "password",
+    "security",
+    "cracking",
+    "hashcracking",
+    "reverse"
+  ],
+  "author": "zzzteph",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zzzteph/hashcat-rules-js/issues"
+  },
+  "homepage": "https://github.com/zzzteph/hashcat-rules-js#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "vite": "^5.3.5",
+    "hashcat-rules-js": "^1.1.1"
+  },
+  "dependencies": {
+    
+  }
+}
