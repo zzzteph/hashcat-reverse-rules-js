@@ -258,16 +258,16 @@ function Nothing(string) {
     return [string];
 }
 
-function Lowercase(string) {
+function Lowercase(string,limit=10) {
     string=string.toLowerCase()
     //return max 65k candidates
-    let lowerCasedCandidates=[];
+    let lowerCasedCandidates=new Set();
     //Uppercase
-    lowerCasedCandidates.push(string.toUpperCase());
+    lowerCasedCandidates.add(string.toUpperCase());
     //Capital
-    lowerCasedCandidates.push(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
+    lowerCasedCandidates.add(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
     //inverse Capital
-    lowerCasedCandidates.push(string.charAt(0).toLowerCase() + string.slice(1).toUpperCase());
+    lowerCasedCandidates.add(string.charAt(0).toLowerCase() + string.slice(1).toUpperCase());
 
     //We will not generate all the candidates, since it could be very resourcefull
     //Password
@@ -275,25 +275,42 @@ function Lowercase(string) {
         PASsword
         PASSword
     */
+
+    let fuzzCandidates=new Set();
+
     for (let i = 0; i < string.length; i++) {
         let chars = string.split('');
         for (let j = 0; j <= i; j++) {
-        chars[j] = chars[j].toUpperCase();
+            chars[j] = chars[j].toUpperCase();
         }
-        lowerCasedCandidates.push(chars.join(''));
+        fuzzCandidates.add(chars.join(''));
     }
-    return lowerCasedCandidates;
+
+    let fuzzArray = [...fuzzCandidates];
+    let pickCount = Math.min(limit, fuzzArray.length);
+    let chosen = new Set();
+
+    while (chosen.size < pickCount) {
+        let randIndex = Math.floor(Math.random() * fuzzArray.length);
+        chosen.add(fuzzArray[randIndex]);
+    }
+
+    for (let item of chosen) {
+        lowerCasedCandidates.add(item);
+    }
+
+    return [...lowerCasedCandidates];
 }
 
-function Uppercase(string) {
+function Uppercase(string,limit=10) {
     string=string.toUpperCase()
-    let upperCasedCandidates=[];
+    let upperCasedCandidates=new Set();
     //Lowercase
-    upperCasedCandidates.push(string.toLowerCase());
+    upperCasedCandidates.add(string.toLowerCase());
     //Capital
-    upperCasedCandidates.push(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
+    upperCasedCandidates.add(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
     //inverse Capital
-    upperCasedCandidates.push(string.charAt(0).toLowerCase() + string.slice(1).toUpperCase());
+    upperCasedCandidates.add(string.charAt(0).toLowerCase() + string.slice(1).toUpperCase());
 
     //We will not generate all the candidates, since it could be very resourcefull
     //Password
@@ -302,50 +319,109 @@ function Uppercase(string) {
         PASsword
         PASSword
     */
+   let fuzzCandidates=new Set();
     for (let i = 0; i < string.length; i++) {
         let chars = string.split('');
         for (let j = 0; j <= i; j++) {
         chars[j] = chars[j].toLowerCase();
         }
-        upperCasedCandidates.push(chars.join(''));
+        fuzzCandidates.add(chars.join(''));
     }
-    return upperCasedCandidates;
+    
+
+    let fuzzArray = [...fuzzCandidates];
+    let pickCount = Math.min(limit, fuzzArray.length);
+    let chosen = new Set();
+
+    while (chosen.size < pickCount) {
+        let randIndex = Math.floor(Math.random() * fuzzArray.length);
+        chosen.add(fuzzArray[randIndex]);
+    }
+
+    for (let item of chosen) {
+        upperCasedCandidates.add(item);
+    }
+
+    return [...upperCasedCandidates];
+
+
 
 }
 
-function Capitalize(string) {
+function Capitalize(string,limit=10) {
     string= string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 
-    let capCasedCandidates=[];
+    let capCasedCandidates=new Set();
     //Lowercase
-    capCasedCandidates.push(string.toLowerCase());
+    capCasedCandidates.add(string.toLowerCase());
     //Capital
-    capCasedCandidates.push(string.toUpperCase());
+    capCasedCandidates.add(string.toUpperCase());
     //inverse Capital
-    capCasedCandidates.push(string.charAt(0).toLowerCase() + string.slice(1).toUpperCase());
+    capCasedCandidates.add(string.charAt(0).toLowerCase() + string.slice(1).toUpperCase());
 
+    let fuzzCandidates=new Set();
+    for(let item of Uppercase(string))
+    {
+        fuzzCandidates.add(item);
+    }
+     for(let item of Lowercase(string))
+     {
+        fuzzCandidates.add(item);
+     }
+    let fuzzArray = [...fuzzCandidates];
+    let pickCount = Math.min(limit, fuzzArray.length);
+    let chosen = new Set();
 
-    capCasedCandidates=capCasedCandidates.concat(Uppercase(string));
-    capCasedCandidates=capCasedCandidates.concat(Lowercase(string));
-    return capCasedCandidates;
+    while (chosen.size < pickCount) {
+        let randIndex = Math.floor(Math.random() * fuzzArray.length);
+        chosen.add(fuzzArray[randIndex]);
+    }
+
+    for (let item of chosen) {
+        capCasedCandidates.add(item);
+    }
+
+    return [...capCasedCandidates];
+
 }
 
-function InvertCapitalize(string) {
+function InvertCapitalize(string,limit=10) {
 
     string= string.charAt(0).toLowerCase() + string.slice(1).toUpperCase();
 
-    let invcapCasedCandidates=[];
+    let invcapCasedCandidates=new Set();
     //Lowercase
-    invcapCasedCandidates.push(string.toLowerCase());
+    invcapCasedCandidates.add(string.toLowerCase());
     //Capital
-    invcapCasedCandidates.push(string.toUpperCase());
+    invcapCasedCandidates.add(string.toUpperCase());
     //inverse Capital
-    invcapCasedCandidates.push(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
+    invcapCasedCandidates.add(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
 
 
-    invcapCasedCandidates=invcapCasedCandidates.concat(Uppercase(string));
-    invcapCasedCandidates=invcapCasedCandidates.concat(Lowercase(string));
-    return invcapCasedCandidates;
+    let fuzzCandidates=new Set();
+    for(let item of Uppercase(string))
+    {
+        fuzzCandidates.add(item);
+    }
+     for(let item of Lowercase(string))
+     {
+        fuzzCandidates.add(item);
+     }
+
+    let fuzzArray = [...fuzzCandidates];
+    let pickCount = Math.min(limit, fuzzArray.length);
+    let chosen = new Set();
+
+    while (chosen.size < pickCount) {
+        let randIndex = Math.floor(Math.random() * fuzzArray.length);
+        chosen.add(fuzzArray[randIndex]);
+    }
+
+    for (let item of chosen) {
+        invcapCasedCandidates.add(item);
+    }
+
+    return [...invcapCasedCandidates];
 
 
 
@@ -353,11 +429,15 @@ function InvertCapitalize(string) {
 
 
 function ToggleCase(string) {
-    var result=[];
-    for (var i = 0; i < string.length; i++) {
-        result = TogglePosition(string, i);
+    let result = '';
+    for (let ch of string) {
+        if (ch === ch.toLowerCase()) {
+            result += ch.toUpperCase();
+        } else {
+            result += ch.toLowerCase();
+        }
     }
-    return result;
+    return [result];
 }
 
 
@@ -395,14 +475,15 @@ function DuplicateN(string, n) {
     n = convertN(n);
     if (n <= 0) return [];
 
-    let len = string.length;
-    if (len % n !== 0) return [];
+    const repeats = n + 1;
+    const len = string.length;
 
-    let part = string.slice(0, len / n);
-    if (part.repeat(n) === string) {
-        return [part];
-    }
-    return [];
+    if (len % repeats !== 0) return [];
+
+    const size = len / repeats;
+    const part = string.slice(0, size);
+
+    return (part.repeat(repeats) === string) ? [part] : [];
 }
 
 function Reflect(string) {
@@ -448,14 +529,14 @@ function PrependCharacter(string, chr) {
 
 function TruncateLeft(string) {
 
-    let charset = "!@#$";
+    let charset = "!@#$qazwsxedcrfvtgbyhnujmikopl";
     let numbers = "1234567890";
-    charset = charset + numbers;
-    /*
+    charset = charset + charset.toUpperCase() + numbers;
+    
     let result = [];
     for (let ch of charset) {
         result.push(ch + string);
-    }*/
+    }
     return [charset[Math.floor(Math.random() * charset.length)] + string];
 
 
@@ -466,14 +547,14 @@ function TruncateLeft(string) {
 function TruncateRight(string) {
 
 
-    let charset = "!@#$";
+    let charset = "!@#$qazwsxedcrfvtgbyhnujmikopl";
     let numbers = "1234567890";
-    charset = charset + numbers;
-/*
+    charset = charset + charset.toUpperCase() + numbers;
+
   let result = [];
   for (let ch of charset) {
     result.push(string + ch);
-  }*/
+  }
   return [string + charset[Math.floor(Math.random() * charset.length)]];
 
 
@@ -485,7 +566,7 @@ function DeleteN(string, n) {
 
     n = convertN(n);
 
-    let charset = "qazwsxedcrfvtgbyhnujmikopl";
+    let charset = "!@#$qazwsxedcrfvtgbyhnujmikopl";
     let numbers = "1234567890";
     charset = charset + charset.toUpperCase() + numbers;
     if(n>string.length)return [string];
@@ -496,12 +577,13 @@ function DeleteN(string, n) {
 
 
 
-function ExtractRange(string, start, length) {
+function OmitRange(string, start, end,limit=10) {
     start = convertN(start);
-    length = convertN(length);
+    end = convertN(end);
 
   if (!Number.isInteger(start) || start < 0 || start > string.length) return [];
-  if (!Number.isInteger(length) || length <= 0) return [];
+  if (!Number.isInteger(end) || end <= 0) return [];
+  if (start>end) return [];
 
   let commonPasswords = [
     "123456","password","qwerty","111111","12345678","abc123",
@@ -525,43 +607,90 @@ function ExtractRange(string, start, length) {
 
 
   let candidatesAll = [...commonPasswords, ...years, ...names, ...numbers];
-  let candidates = []
-  for(let i=0;i<candidatesAll.length;i++)
+  let validCandidates=[];
+  for (let entry of candidatesAll)
   {
-    if(candidatesAll[i].length!==length)continue;
-    if(!candidates.includes(candidatesAll[i]))candidates.push(candidatesAll[i]);
+    if(entry.length==(end-start))validCandidates.push(entry)
+  }
+  let tmpCandidates = new Set();
+  for(let i=0;i<limit;i++)
+  {    
+    tmpCandidates.add(string.slice(0,start)+validCandidates[Math.floor(Math.random() * validCandidates.length)])+string.slice(start);
   }
 
-  let prefix = string.slice(0, start);
-  let suffix = string.slice(start);
-  return candidates.map(ins => prefix + ins + suffix);
+
+    return [...tmpCandidates];
+
 
 }
 
-function OmitRange(string, start, end) {
-    return ExtractRange(string, start, end);
+function ExtractRange(string, start, end,limit=10) {
+    
+//OMIT Do oposite thing
+    start = convertN(start);
+    end = convertN(end);
+  if (!Number.isInteger(start) || start < 0 || start > string.length) return [];
+  if (!Number.isInteger(end) || end <= 0) return [];
+  if (start>end) return [];
+  if (end<=string.length-1) return [];
+
+  let commonPasswords = [
+    "123456","password","qwerty","111111","12345678","abc123",
+    "password1","123456789","1234567890","12345","000000","iloveyou",
+    "admin","welcome","monkey","dragon"
+  ];
+
+  let years = Array.from({ length: 2050 - 1900 + 1 }, (_, i) => String(1900 + i));
+
+  let baseNames = [
+    "john","michael","david","daniel","james","robert",
+    "mary","jennifer","linda","patricia","susan","jessica",
+    "maria","anna","andrew","thomas","alex","kate","olga","dmitry"
+  ];
+  let names = [
+    ...baseNames,
+    ...baseNames.map(n => n.charAt(0).toUpperCase() + n.slice(1))
+  ];
+
+  let numbers = Array.from({ length: 999 }, (_, i) => String(i + 1));
+
+
+  let candidatesAll = [...commonPasswords, ...years, ...names, ...numbers];
+  let tmpCandidates = new Set();
+  for(let i=0;i<limit;i++)
+  {
+    tmpCandidates.add(string+candidatesAll[Math.floor(Math.random() * candidatesAll.length)]);
+    tmpCandidates.add(candidatesAll[Math.floor(Math.random() * candidatesAll.length)]+string+candidatesAll[Math.floor(Math.random() * candidatesAll.length)]);
+    tmpCandidates.add(candidatesAll[Math.floor(Math.random() * candidatesAll.length)]+string);
+}
+
+
+    return [...tmpCandidates];
+
+
+
+
+
+
+
 }
 
 function InsertN(string, pos, chr) {
     pos = convertN(pos);
-    
-    //if pos > then length, return string
     if (pos < 0 || pos >= string.length) {
         return [string];
     }
 
-    //remove character
     if ( string[pos] === chr) {
         return [string.slice(0, pos) + string.slice(pos + 1)];
     }
 
-    //Not same letter ? empty
     return [];
 
 
 }
 
-function OverwriteN(string, pos, chr) {
+function OverwriteN(string, pos, chr,limit=10) {
     pos = convertN(pos);
 
 
@@ -572,13 +701,14 @@ function OverwriteN(string, pos, chr) {
     let charset = "qazwsxedcrfvtgbyhnujmikopl";
     let numbers = "1234567890";
     charset = charset + charset.toUpperCase() + numbers;
-  if (string[pos].toLowerCase() === chr.toLowerCase()) {
-    let result = [];
-    for (let repl of charset) {
-      result.push(string.slice(0, pos) + repl + string.slice(pos + 1));
+    if (string[pos].toLowerCase() === chr.toLowerCase()) {
+        let result = [];
+        for(let i=0;i<limit;i++)
+        {
+            result.push(string.slice(0, pos) + charset[Math.floor(Math.random() * charset.length)] + string.slice(pos + 1));
+        }
+        return result;
     }
-    return result;
-  }
 
 
   return [];
@@ -588,7 +718,7 @@ function OverwriteN(string, pos, chr) {
 }
 
 function TruncateN(string, start) {
-   
+   let limit = 20;
     start = convertN(start);
 
   if (!Number.isInteger(start) || start < 0) return [];
@@ -616,8 +746,18 @@ function TruncateN(string, start) {
   let candidatesAll = [...commonPasswords, ...years, ...names, ...numbers];
   let prefix = string.slice(0, start);
   let suffix = string.slice(start);
-  return candidatesAll.map(ins => prefix + ins + suffix);
 
+
+  const k = Math.min(limit, candidatesAll.length);
+
+  const reservoir = candidatesAll.slice(0, k);
+  for (let i = k; i < candidatesAll.length; i++) {
+    const j = Math.floor(Math.random() * (i + 1));
+    if (j < k) reservoir[j] = candidatesAll[i];
+  }
+
+  // формируем итоговые строки только для выбранных кандидатов
+  return reservoir.map(ins => prefix + ins + suffix);
 
 
 }
@@ -691,56 +831,56 @@ function DuplicateAll(string) {
 
 
 
-function applyReverseRuleToPassword(password, rule)
+function applyReverseRuleToPassword(password, rule,limit)
 {
 
 
     for (var i = 0; i < rule.length;) {
         switch (rule.charAt(i)) {
             case ':':
-                return Nothing(password);
+                return Nothing(password);//+
             case 'l':
-                return Lowercase(password);
+                return Lowercase(password,limit);//+
             case 'u':
-                return Uppercase(password);           
+                return Uppercase(password,limit);   //+        
             case 'c':
-                return Capitalize(password);    
+                return Capitalize(password,limit);    //+
             case 'C':
-                return InvertCapitalize(password);        
+                return InvertCapitalize(password,limit); //+       
             case 't':
-                return ToggleCase(password);        
+                return ToggleCase(password,limit);        //+
             case 'T':
-                return TogglePosition(password, rule.charAt(i + 1));
+                return TogglePosition(password, rule.charAt(i + 1));//+
             case 'r':
-                return Reverse(password);
+                return Reverse(password);//+
             case 'd':
-                return  Duplicate(password);
+                return  Duplicate(password);//+
             case 'p':
-                return  DuplicateN(password, rule.charAt(i + 1));
+                return  DuplicateN(password, rule.charAt(i + 1));//+
             case 'f':
-               return Reflect(password);
+               return Reflect(password);//+
             case '{':
-               return RotateLeft(password);
+               return RotateLeft(password);//+
             case '}':
-                return RotateRight(password);
+                return RotateRight(password);//+
             case '$':
-                return AppendCharacter(password, rule.charAt(i + 1));
+                return AppendCharacter(password, rule.charAt(i + 1));//+ this rule EXPECT something - need to take this into account into next version
             case '^':
-                return PrependCharacter(password, rule.charAt(i + 1));
+                return PrependCharacter(password, rule.charAt(i + 1));//+ this rule EXPECT something - need to take this into account into next version
             case '[':
-                return TruncateLeft(password);
+                return TruncateLeft(password);//+
             case ']':
-                return TruncateRight(password);
+                return TruncateRight(password);//+
             case 'D':
-                return DeleteN(password, rule.charAt(i + 1));
+                return DeleteN(password, rule.charAt(i + 1));//+
             case 'x':
-                return ExtractRange(password, rule.charAt(i + 1), rule.charAt(i + 2));
+                return ExtractRange(password, rule.charAt(i + 1), rule.charAt(i + 2),limit);//+ unstable
             case 'O':
-                return OmitRange(password, rule.charAt(i + 1), rule.charAt(i + 2));
+                return OmitRange(password, rule.charAt(i + 1), rule.charAt(i + 2),limit);//+ unstable
             case 'i':
-                return  InsertN(password, rule.charAt(i + 1), rule.charAt(i + 2));
+                return  InsertN(password, rule.charAt(i + 1), rule.charAt(i + 2));//+
             case 'o':
-                return  OverwriteN(password, rule.charAt(i + 1), rule.charAt(i + 2));
+                return  OverwriteN(password, rule.charAt(i + 1), rule.charAt(i + 2),limit);// + 
             case '\'':
                 return  TruncateN(password, rule.charAt(i + 1));
             case 's':
@@ -767,13 +907,13 @@ function applyReverseRuleToPassword(password, rule)
 
 
 
-function applyReverseRule(passwords, rule)
+function reverseRule(passwords, rule,limit)
 {
     let applied_array=[];
     let lngth=passwords.length;
     for(let i=0;i<lngth;i++)
     {
-       applied_array= applied_array.concat(applyReverseRuleToPassword(passwords[i],rule));
+       applied_array= applied_array.concat(applyReverseRuleToPassword(passwords[i],rule,limit));
     }
 
     //making array uniq
@@ -789,7 +929,7 @@ function applyReverseRule(passwords, rule)
 
 
 
-export function reverseTheRule(password, rule, memlimit=65000) {
+export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
 
     let rulesGrams=[]
     
@@ -823,7 +963,6 @@ export function reverseTheRule(password, rule, memlimit=65000) {
                 break;
             case 'T':
                 rulesGrams.push("T".concat(rule.charAt(i + 1)));
-
                 i += 2;
                 break;
             case 'r':
@@ -928,11 +1067,11 @@ export function reverseTheRule(password, rule, memlimit=65000) {
     {    
         if(i==0)
         {
-            candidates=applyReverseRule([password],rulesGrams[i]);
+            candidates=reverseRule([password],rulesGrams[i],limit);
         }
         else
         {
-            candidates=applyReverseRule(candidates,rulesGrams[i]);
+            candidates=reverseRule(candidates,rulesGrams[i],limit);
         }
         if(memlimit!==false && candidates.length>memlimit)
         {
