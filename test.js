@@ -91,7 +91,23 @@ console.log(hashcat.applyReverseRule("p@ss!W0rd","i4!"));
 console.log("Overwrite");
 console.log(hashcat.applyReverseRule("p@s$W0rd","o3$"));
 
+console.log("Truncate");
+console.log(hashcat.applyReverseRule("p@ssW0","'6"));
 
+console.log("Replace");
+console.log(hashcat.applyReverseRule("p@$$W0rd","ss$"));
+
+console.log("Purge");
+console.log(hashcat.applyReverseRule("p@W0rd","@s"));
+
+
+console.log("DuplicateFirst");
+console.log(hashcat.applyReverseRule("ppp@ssW0rd","z2"));
+console.log("DuplicateLast");
+console.log(hashcat.applyReverseRule("p@ssW0rddd","Z2"));
+console.log("Duplicate all");
+console.log(hashcat.applyReverseRule("pp@@ssssWW00rrdd","q"));
+console.log(hashcat.applyReverseRule("pp@@ssssWW000rrdd","q"));
 /*
 console.log(hashcat.applyReverseRule("password","l"));
 console.log(hashcat.applyReverseRule("password","D9"));//Last added

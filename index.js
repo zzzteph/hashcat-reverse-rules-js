@@ -717,12 +717,11 @@ function OverwriteN(string, pos, chr,limit=10) {
 
 }
 
-function TruncateN(string, start) {
-   let limit = 20;
+function TruncateN(string, start,limit=10) {
     start = convertN(start);
 
   if (!Number.isInteger(start) || start < 0) return [];
-
+    if(start!=string.length)return [];
 
   let commonPasswords = [
     "123456","password","qwerty","111111","12345678","abc123",
@@ -744,21 +743,13 @@ function TruncateN(string, start) {
 
   let numbers = Array.from({ length: 999 }, (_, i) => String(i + 1));
   let candidatesAll = [...commonPasswords, ...years, ...names, ...numbers];
-  let prefix = string.slice(0, start);
-  let suffix = string.slice(start);
+  let tmpCandidates = new Set();
+  for(let i=0;i<limit;i++)
+  {
+    tmpCandidates.add(string+candidatesAll[Math.floor(Math.random() * candidatesAll.length)]);
+}
 
-
-  const k = Math.min(limit, candidatesAll.length);
-
-  const reservoir = candidatesAll.slice(0, k);
-  for (let i = k; i < candidatesAll.length; i++) {
-    const j = Math.floor(Math.random() * (i + 1));
-    if (j < k) reservoir[j] = candidatesAll[i];
-  }
-
-  // формируем итоговые строки только для выбранных кандидатов
-  return reservoir.map(ins => prefix + ins + suffix);
-
+return [...tmpCandidates];
 
 }
 
@@ -831,6 +822,169 @@ function DuplicateAll(string) {
 
 
 
+
+function SwapFront(string)
+{
+    if (string.length < 2) {
+        return string; 
+    }
+    return string[1] + string[0] + string.slice(2);
+}
+
+function SwapBack(string)
+{
+   if (string.length < 2) {
+    return string;
+  }
+  return string.slice(0, -2) + string[string.length - 1] + string[string.length - 2];
+}
+
+
+function SwapPosition(string, n, m) {
+    n = convertN(n);
+    m = convertN(m);
+  if (n < 0 || m < 0 || n >= string.length || m >= string.length) {
+    return string;
+  }
+  if (n === m) {
+    return string;
+  }
+
+  let arr = string.split("");
+  [arr[n], arr[m]] = [arr[m], arr[n]]; 
+  return arr.join("");
+}
+
+
+function BitwiseShiftLeft(string, n) {
+  n = convertN(n);
+  if (n < 0 || n >= string.length) {
+    return string;
+  }
+  let arr = string.split("");
+  let code = arr[n].charCodeAt(0);
+  arr[n] = String.fromCharCode(code << 1);
+  return arr.join("");
+}
+
+function BitwiseShiftRight(string, n) {
+    n = convertN(n);
+  if (n < 0 || n >= string.length) {
+    return string;
+  }
+  let arr = string.split("");
+  let code = arr[n].charCodeAt(0);
+  arr[n] = String.fromCharCode(code >> 1);
+  return arr.join("");
+}
+
+
+function ASCIIIncrement(string, n) {
+
+  n = convertN(n);  
+
+  if (n < 0 || n >= string.length) {
+    return string;
+  }
+  let arr = string.split("");
+  arr[n] = String.fromCharCode(arr[n].charCodeAt(0) + 1);
+  return arr.join("");
+}
+
+function ASCIIDecrement(string, n) {
+  n = convertN(n);  
+
+  if (n < 0 || n >= string.length) {
+    return string;
+  }
+  let arr = string.split("");
+  arr[n] = String.fromCharCode(arr[n].charCodeAt(0) - 1);
+  return arr.join("");
+}
+
+function ReplacePlus(string, n) {
+  n = convertN(n);  
+
+  if (n < 0 || n >= string.length-1) {
+    return string;
+  }
+  let arr = string.split("");
+  arr[n] = arr[n+1];
+  return arr.join("");
+}
+function ReplaceMinus(string, n) {
+  n = convertN(n);  
+
+  if (n < 0 || n >= string.length) {
+    return string;
+  }
+  let arr = string.split("");
+  arr[n] = arr[n-1];
+  return arr.join("");
+}
+
+
+function DuplicateLastNChars(string, n) {
+    n = convertN(n);  
+  if (n <= 0 || n > string.length) {
+    return string;
+  }
+  let suffix = string.slice(-n);
+  return string.slice(0, -n) + suffix + suffix;
+}
+
+
+function DuplicateFirstNChars(string, n) {
+    n = convertN(n);  
+  if (n <= 0 || n > string.length) {
+    return string;
+  }
+  let prefix = string.slice(0, n);
+  return prefix + prefix + string.slice(n);
+}
+
+
+function CapitalizeAfterSeparator(string, separator) {
+  string = string.toLowerCase();
+
+  let result = "";
+  let makeUpper = true;
+
+  for (let i = 0; i < string.length; i++) {
+    let ch = string[i];
+    if (makeUpper && /[a-z]/i.test(ch)) {
+      result += ch.toUpperCase();
+      makeUpper = false;
+    } else {
+      result += ch;
+    }
+
+    if (ch === separator) {
+      makeUpper = true;
+    }
+  }
+
+  return result;
+}
+
+function CapitalizeWords(string) {
+  string = string.toLowerCase();
+
+  return string
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+
+
+
+
+
+
+
+
+
 function applyReverseRuleToPassword(password, rule,limit)
 {
 
@@ -882,18 +1036,45 @@ function applyReverseRuleToPassword(password, rule,limit)
             case 'o':
                 return  OverwriteN(password, rule.charAt(i + 1), rule.charAt(i + 2),limit);// + 
             case '\'':
-                return  TruncateN(password, rule.charAt(i + 1));
+                return  TruncateN(password, rule.charAt(i + 1));//+ unstable only if the length the same
             case 's':
-                return Replace(password, rule.charAt(i + 1), rule.charAt(i + 2));
+                return Replace(password, rule.charAt(i + 1), rule.charAt(i + 2));//+
             case '@':
-               return Purge(password, rule.charAt(i + 1));
+               return Purge(password, rule.charAt(i + 1));//+
             case 'z':
-                return DuplicateFirstN(password, rule.charAt(i + 1));
+                return DuplicateFirstN(password, rule.charAt(i + 1));//+
             case 'Z':
-                return DuplicateLastN(password, rule.charAt(i + 1));
+                return DuplicateLastN(password, rule.charAt(i + 1));//+
             case 'q':
-                return DuplicateAll(password);
+                return DuplicateAll(password);//+
 
+
+            case 'k':
+                return SwapFront(password);
+            case 'K':
+                return SwapBack(password);
+            case '*':
+                return SwapPosition(password, rule.charAt(i + 1), rule.charAt(i + 2));
+            case 'L':
+                return BitwiseShiftLeft(password, rule.charAt(i + 1));
+            case 'R':
+                return BitwiseShiftRight(password, rule.charAt(i + 1));
+            case '+':
+                return ASCIIIncrement(password, rule.charAt(i + 1));
+            case '-':
+                return ASCIIDecrement(password, rule.charAt(i + 1));
+            case '.':
+                return ReplacePlus(password, rule.charAt(i + 1));
+            case ',':
+                return ReplaceMinus(password, rule.charAt(i + 1));
+            case 'y':
+                return DuplicateFirstNChars(password, rule.charAt(i + 1));
+            case 'Y':
+                return DuplicateLastNChars(password, rule.charAt(i + 1));
+             case 'e':
+                return CapitalizeAfterSeparator(password, rule.charAt(i + 1));
+             case 'E':
+                return CapitalizeWords(password);
 
         }
 
@@ -962,6 +1143,7 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
                 i++;
                 break;
             case 'T':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("T".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
@@ -974,6 +1156,7 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
                 i++;
                 break;
             case 'p':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("p".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
@@ -990,10 +1173,12 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
                 i++;
                 break;
             case '$':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("$".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
             case '^':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("^".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
@@ -1006,42 +1191,52 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
                 i++;
                 break;
             case 'D':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("D".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
             case 'x':
+                if(i+2>=rule.length)break;
                 rulesGrams.push("x".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
                 i += 3;
                 break;
             case 'O':
+                if(i+2>=rule.length)break;
                rulesGrams.push("O".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
                 i += 3;
                 break;
             case 'i':
+                if(i+2>=rule.length)break;
                 rulesGrams.push("i".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
                 i += 3;
                 break;
             case 'o':
+                if(i+2>=rule.length)break;
                rulesGrams.push("o".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
                 i += 3;
                 break;
             case '\'':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("'".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
             case 's':
+                if(i+2>=rule.length)break;
                 rulesGrams.push("s".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
                 i += 3;
                 break;
             case '@':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("@".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
             case 'z':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("z".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
             case 'Z':
+                if(i+1>=rule.length)break;
                 rulesGrams.push("Z".concat(rule.charAt(i + 1)));
                 i += 2;
                 break;
@@ -1049,6 +1244,81 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
                 rulesGrams.push("q");
                 i++;
                 break;
+
+            case 'k':
+                rulesGrams.push("k");
+                i++;
+                break;
+            case 'K':
+                rulesGrams.push("K");
+                i++;
+                break;
+            case '*':
+                if(i+2>=rule.length)break;
+                rulesGrams.push("q".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
+                i+=3;
+                break;
+            case 'L':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("L".concat(rule.charAt(i + 1)));
+                i+=2;
+                break;
+            case 'R':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("R".concat(rule.charAt(i + 1)));
+                i+=2;
+                break;
+            case '+':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("+".concat(rule.charAt(i + 1)));
+                i+=2;
+                break;
+            case '-':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("-".concat(rule.charAt(i + 1)));
+               i+=2;
+                break;
+
+            case '.':
+                if(i+1>=rule.length)break;
+                rulesGrams.push(".".concat(rule.charAt(i + 1)));
+               i+=2;
+                break;
+            case ',':
+                if(i+1>=rule.length)break;
+                rulesGrams.push(",".concat(rule.charAt(i + 1)));
+               i+=2;
+                break;
+
+            case 'y':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("y".concat(rule.charAt(i + 1)));
+               i+=2;
+                break;
+            case 'Y':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("Y".concat(rule.charAt(i + 1)));
+               i+=2;
+                break;
+
+            case 'e':
+                if(i+1>=rule.length)break;
+                rulesGrams.push("e".concat(rule.charAt(i + 1)));
+               i+=2;
+                break;
+
+
+            case 'E':
+                rulesGrams.push("K");
+                i++;
+                break;
+
+
+
+
+
+
+
             default:
                 i++;
                 break;
