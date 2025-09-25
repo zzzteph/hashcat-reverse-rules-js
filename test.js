@@ -3,6 +3,9 @@ const hashcat = require('./dist/hashcat-reverse-rules.js');
 const fs = require('fs');
 const readline = require('readline');
 
+
+console.log(hashcat.reversePassword("P@assword123"));
+
 console.log(hashcat.applyReverseRule("password","l"));
 console.log(hashcat.applyReverseRule("a","l"));
 console.log(hashcat.applyReverseRule("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","l"));

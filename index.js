@@ -205,7 +205,7 @@ function secondRoundCandidates(string)
 }
 
 
-export function generateCandidates(string, withRules=false)
+export function reversePassword(string, withRules=false)
 {
     let candidates = new Map();
 
