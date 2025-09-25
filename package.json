@@ -1,6 +1,6 @@
 {
   "name": "hashcat-reverse-rules-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Reverse rules hashcat engine and generating candidates for password for complex search",
   "main": "dist/hashcat-reverse-rules.js",
   "scripts": {
