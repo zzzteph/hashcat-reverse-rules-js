@@ -569,7 +569,7 @@ function DeleteN(string, n) {
     let charset = "!@#$qazwsxedcrfvtgbyhnujmikopl";
     let numbers = "1234567890";
     charset = charset + charset.toUpperCase() + numbers;
-    if(n>string.length)return [string];
+    if(n>string.length)return [];
 
     return [string.slice(0, n) + charset[Math.floor(Math.random() * charset.length)] + string.slice(n)];
 
@@ -678,7 +678,7 @@ function ExtractRange(string, start, end,limit=10) {
 function InsertN(string, pos, chr) {
     pos = convertN(pos);
     if (pos < 0 || pos >= string.length) {
-        return [string];
+        return [];
     }
 
     if ( string[pos] === chr) {
@@ -695,7 +695,7 @@ function OverwriteN(string, pos, chr,limit=10) {
 
 
   if (pos < 0 || pos >= string.length) {
-    return [string];
+    return [];
   }
 
     let charset = "qazwsxedcrfvtgbyhnujmikopl";
@@ -762,7 +762,7 @@ function Replace(string, find, replace) {
 function Purge(string, chr) {
     
 
-  if (string.includes(chr)) return [string];
+  if (string.includes(chr)) return [];
   const pos = Math.floor(Math.random() * (string.length + 1));
 
   return string.slice(0, pos) + chr + string.slice(pos);
@@ -772,7 +772,7 @@ function Purge(string, chr) {
 function DuplicateFirstN(string, n) {
 
   n = convertN(n);
-  if (!string) return [string];
+  if (!string) return [];
   const first = string[0];
   let i = 1;
   while (i < string.length && string[i] === first) {
@@ -788,7 +788,7 @@ function DuplicateFirstN(string, n) {
 function DuplicateLastN(string, n) {
 
     n = convertN(n);
-  if (!string) return string;
+  if (!string) return [];
   let last = string[string.length - 1];
   let i = string.length - 2;
   while (i >= 0 && string[i] === last) {
@@ -802,7 +802,7 @@ function DuplicateLastN(string, n) {
 function DuplicateAll(string) {
 
 
-  if (!string) return [string];
+  if (!string) return [];
 
   let res = "";
   let i = 0;
@@ -826,17 +826,17 @@ function DuplicateAll(string) {
 function SwapFront(string)
 {
     if (string.length < 2) {
-        return string; 
+        return []; 
     }
-    return string[1] + string[0] + string.slice(2);
+    return [string[1] + string[0] + string.slice(2)];
 }
 
 function SwapBack(string)
 {
    if (string.length < 2) {
-    return string;
+    return [];
   }
-  return string.slice(0, -2) + string[string.length - 1] + string[string.length - 2];
+  return [string.slice(0, -2) + string[string.length - 1] + string[string.length - 2]];
 }
 
 
@@ -844,38 +844,37 @@ function SwapPosition(string, n, m) {
     n = convertN(n);
     m = convertN(m);
   if (n < 0 || m < 0 || n >= string.length || m >= string.length) {
-    return string;
+    return [];
   }
   if (n === m) {
-    return string;
+    return [];
   }
-
   let arr = string.split("");
   [arr[n], arr[m]] = [arr[m], arr[n]]; 
-  return arr.join("");
+  return [arr.join("")];
 }
 
 
 function BitwiseShiftLeft(string, n) {
   n = convertN(n);
   if (n < 0 || n >= string.length) {
-    return string;
+    return [];
   }
   let arr = string.split("");
   let code = arr[n].charCodeAt(0);
-  arr[n] = String.fromCharCode(code << 1);
-  return arr.join("");
+  arr[n] = String.fromCharCode(code >> 1);
+  return [arr.join("")];
 }
 
 function BitwiseShiftRight(string, n) {
     n = convertN(n);
   if (n < 0 || n >= string.length) {
-    return string;
+    return [];
   }
   let arr = string.split("");
   let code = arr[n].charCodeAt(0);
-  arr[n] = String.fromCharCode(code >> 1);
-  return arr.join("");
+  arr[n] = String.fromCharCode(code << 1);
+  return [arr.join("")];
 }
 
 
@@ -884,63 +883,75 @@ function ASCIIIncrement(string, n) {
   n = convertN(n);  
 
   if (n < 0 || n >= string.length) {
-    return string;
+    return [];
   }
   let arr = string.split("");
-  arr[n] = String.fromCharCode(arr[n].charCodeAt(0) + 1);
-  return arr.join("");
+  arr[n] = String.fromCharCode(arr[n].charCodeAt(0) - 1);
+  return [arr.join("")];
 }
 
 function ASCIIDecrement(string, n) {
   n = convertN(n);  
 
   if (n < 0 || n >= string.length) {
-    return string;
+    return [];
   }
   let arr = string.split("");
-  arr[n] = String.fromCharCode(arr[n].charCodeAt(0) - 1);
-  return arr.join("");
+  arr[n] = String.fromCharCode(arr[n].charCodeAt(0) + 1);
+  return [arr.join("")];
 }
 
 function ReplacePlus(string, n) {
   n = convertN(n);  
 
   if (n < 0 || n >= string.length-1) {
-    return string;
+    return [];
   }
   let arr = string.split("");
-  arr[n] = arr[n+1];
-  return arr.join("");
+  arr[n] = arr[n-1];
+  return [arr.join("")];
 }
 function ReplaceMinus(string, n) {
   n = convertN(n);  
 
   if (n < 0 || n >= string.length) {
-    return string;
+    return [];
   }
   let arr = string.split("");
-  arr[n] = arr[n-1];
-  return arr.join("");
+  arr[n] = arr[n+1];
+  return [arr.join("")];
 }
 
 
 function DuplicateLastNChars(string, n) {
-    n = convertN(n);  
-  if (n <= 0 || n > string.length) {
-    return string;
-  }
-  let suffix = string.slice(-n);
-  return string.slice(0, -n) + suffix + suffix;
+    n = convertN(n);
+    if (n <= 0 || n * 2 > string.length) {
+        return [];
+    }
+
+    let suffix = string.slice(-n);
+    let prev = string.slice(-2 * n, -n);
+
+    if (suffix === prev) {
+        return [string.slice(0, -n)];
+    }
+    return [];
 }
 
 
 function DuplicateFirstNChars(string, n) {
-    n = convertN(n);  
-  if (n <= 0 || n > string.length) {
-    return string;
-  }
-  let prefix = string.slice(0, n);
-  return prefix + prefix + string.slice(n);
+    n = convertN(n);
+    if (n <= 0 || n * 2 > string.length) {
+        return [];
+    }
+
+    let prefix = string.slice(0, n);
+    let next = string.slice(n, n * 2);
+
+    if (prefix === next) {
+        return [prefix + string.slice(n * 2)];
+    }
+    return [];
 }
 
 
@@ -948,32 +959,32 @@ function CapitalizeAfterSeparator(string, separator) {
   string = string.toLowerCase();
 
   let result = "";
-  let makeUpper = true;
+  let makeLower = true;
 
   for (let i = 0; i < string.length; i++) {
     let ch = string[i];
-    if (makeUpper && /[a-z]/i.test(ch)) {
-      result += ch.toUpperCase();
-      makeUpper = false;
+    if (makeLower && /[a-z]/i.test(ch)) {
+      result += ch.toLowerCase();
+      makeLower = false;
     } else {
       result += ch;
     }
 
     if (ch === separator) {
-      makeUpper = true;
+      makeLower = true;
     }
   }
 
-  return result;
+  return [result];
 }
 
 function CapitalizeWords(string) {
   string = string.toLowerCase();
 
-  return string
+  return [string
     .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
+    .join(" ")];
 }
 
 
@@ -1050,27 +1061,27 @@ function applyReverseRuleToPassword(password, rule,limit)
 
 
             case 'k':
-                return SwapFront(password);
+                return SwapFront(password);//+
             case 'K':
-                return SwapBack(password);
+                return SwapBack(password);//+
             case '*':
-                return SwapPosition(password, rule.charAt(i + 1), rule.charAt(i + 2));
+                return SwapPosition(password, rule.charAt(i + 1), rule.charAt(i + 2));//+
             case 'L':
-                return BitwiseShiftLeft(password, rule.charAt(i + 1));
+                return BitwiseShiftLeft(password, rule.charAt(i + 1));//+
             case 'R':
-                return BitwiseShiftRight(password, rule.charAt(i + 1));
+                return BitwiseShiftRight(password, rule.charAt(i + 1));//+-
             case '+':
-                return ASCIIIncrement(password, rule.charAt(i + 1));
+                return ASCIIIncrement(password, rule.charAt(i + 1));//+
             case '-':
-                return ASCIIDecrement(password, rule.charAt(i + 1));
+                return ASCIIDecrement(password, rule.charAt(i + 1));//+
             case '.':
-                return ReplacePlus(password, rule.charAt(i + 1));
+                return ReplacePlus(password, rule.charAt(i + 1));//+
             case ',':
-                return ReplaceMinus(password, rule.charAt(i + 1));
+                return ReplaceMinus(password, rule.charAt(i + 1));//+
             case 'y':
-                return DuplicateFirstNChars(password, rule.charAt(i + 1));
+                return DuplicateFirstNChars(password, rule.charAt(i + 1));//+
             case 'Y':
-                return DuplicateLastNChars(password, rule.charAt(i + 1));
+                return DuplicateLastNChars(password, rule.charAt(i + 1));//+
              case 'e':
                 return CapitalizeAfterSeparator(password, rule.charAt(i + 1));
              case 'E':
@@ -1255,7 +1266,7 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
                 break;
             case '*':
                 if(i+2>=rule.length)break;
-                rulesGrams.push("q".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
+                rulesGrams.push("*".concat(rule.charAt(i + 1)).concat(rule.charAt(i + 2)));
                 i+=3;
                 break;
             case 'L':
@@ -1309,7 +1320,7 @@ export function applyReverseRule(password, rule, memlimit=65000, limit=10) {
 
 
             case 'E':
-                rulesGrams.push("K");
+                rulesGrams.push("E");
                 i++;
                 break;
 

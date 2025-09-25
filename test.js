@@ -108,68 +108,48 @@ console.log(hashcat.applyReverseRule("p@ssW0rddd","Z2"));
 console.log("Duplicate all");
 console.log(hashcat.applyReverseRule("pp@@ssssWW00rrdd","q"));
 console.log(hashcat.applyReverseRule("pp@@ssssWW000rrdd","q"));
-/*
-console.log(hashcat.applyReverseRule("password","l"));
-console.log(hashcat.applyReverseRule("password","D9"));//Last added
-console.log(hashcat.applyReverseRule("password","D10"));//empty
 
-console.log(hashcat.applyReverseRule("password","x19"));
-console.log(hashcat.applyReverseRule("password","x1A"));
+console.log("Swap front");
+console.log(hashcat.applyReverseRule("@pssW0rd","k"));
+console.log(hashcat.applyReverseRule("@p","k"));
+console.log(hashcat.applyReverseRule("1","k"));
+console.log("Swap back");
+console.log(hashcat.applyReverseRule("p@ssW0dr","K"));
+console.log(hashcat.applyReverseRule("p@ssW0dr","K"));
+console.log(hashcat.applyReverseRule("p@ssW0dr","K"));
+console.log("Swap position");
+console.log(hashcat.applyReverseRule("p@sWs0rd","*34"));
+console.log(hashcat.applyReverseRule("pass","*34"));
 
-
-console.log(hashcat.applyReverseRule("password","i1a"));//pssword
-console.log(hashcat.applyReverseRule("password","i7d"));//passwor
-console.log(hashcat.applyReverseRule("password","i7a"));//[]
-
-
-console.log(hashcat.applyReverseRule("password","o3s"));//Array
-console.log(hashcat.applyReverseRule("pas$word","o3$"));
-console.log(hashcat.applyReverseRule("password","o31"));
-console.log(hashcat.applyReverseRule("password","oB1"));
-
-console.log(hashcat.applyReverseRule("password","'6"));
-
-console.log(hashcat.applyReverseRule("password","s$s"));
-console.log(hashcat.applyReverseRule("password","@s"));
-
-console.log(hashcat.applyReverseRule("password","z1"));
-console.log(hashcat.applyReverseRule("pppassword","z1"));
-console.log(hashcat.applyReverseRule("pppppassword","z3"));
+console.log("Bitwise left");
+console.log(hashcat.applyReverseRule("p@æsW0rd","L2"));
 
 
-console.log(hashcat.applyReverseRule("password","Z1"));
-console.log(hashcat.applyReverseRule("ppassworddddd","Z2"));
-console.log(hashcat.applyReverseRule("pppppasswordddd","Z3"));
+console.log("Bitwise right");
+console.log(hashcat.applyReverseRule("p@9sW0rd","R2"));
+
+console.log("ASCII increment");
+console.log(hashcat.applyReverseRule("p@tsW0rd","+2"));
+console.log("ASCII ddedcrement");
+console.log(hashcat.applyReverseRule("p?ssW0rd","-1"));
+
+console.log("Replace N+1");
+console.log(hashcat.applyReverseRule("psssW0rd",".1"));
+console.log("Replace N-1");
+console.log(hashcat.applyReverseRule("ppssW0rd",",1"));
 
 
-console.log(hashcat.applyReverseRule("password","Z1z1"));
-console.log(hashcat.applyReverseRule("ppassworddddd","Z2z1"));
-console.log(hashcat.applyReverseRule("pppppasswordddd","Z3z1"));
-console.log(hashcat.applyReverseRule("pppppasswordddd","q"));
-console.log(hashcat.applyReverseRule("ppaasswwoorrdd","q"));
-console.log(hashcat.applyReverseRule("ppaasssswwoorrdd","q"));
-*/
-
-//console.log(hashcat.generateCandidates("password123"));
-
-/*
+console.log("Duplicate N first");
+console.log(hashcat.applyReverseRule("p@p@ssW0rd","y2"));
+console.log(hashcat.applyReverseRule("pp@ssW0rd","y2"));
 
 
+console.log("Duplicate N last");
+console.log(hashcat.applyReverseRule("p@ssW0rdrd","Y2"));
+console.log(hashcat.applyReverseRule("p@ssW0","Y2"));
 
-function readRulesSync(filePath) {
-  const data = fs.readFileSync(filePath, 'utf-8');
-  const lines = data.split(/\r?\n/);
-let i=0;
-let success=0;
-let fail=0;
-  for (const line of lines) {
-    if (line.trim() === '') continue;
-   hashcat.reverseTheRule("password",line); 
 
-  }
-  
-}
-  */
-/*
-readRulesSync('fuzz.rule');
-*/
+console.log("Lower the words");
+console.log(hashcat.applyReverseRule("P@ssw0rd W0rld","E"));
+console.log("Lower the words");
+console.log(hashcat.applyReverseRule("P@ssw0rd-W0rld","e-"));
